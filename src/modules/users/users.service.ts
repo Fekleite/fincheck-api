@@ -3,18 +3,21 @@ import { hash } from 'bcryptjs';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { PrismaService } from 'src/shared/database/prisma.service';
+import { UsersRepository } from 'src/shared/database/repositories/users.repositories';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
     const { email, name, password } = createUserDto;
 
-    const emailTaken = await this.prismaService.user.findUnique({
+    const emailTaken = await this.usersRepository.findUnique({
       where: {
         email,
+      },
+      select: {
+        id: true,
       },
     });
 
@@ -24,7 +27,7 @@ export class UsersService {
 
     const hashedPassword = await hash(password, 12);
 
-    const user = await this.prismaService.user.create({
+    const user = await this.usersRepository.create({
       data: {
         name,
         email,
