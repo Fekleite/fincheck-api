@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 
 import { BankAccountsService } from './bank-accounts.service';
@@ -32,12 +33,17 @@ export class BankAccountsController {
     return this.bankAccountsService.findAllByUserId(userId);
   }
 
-  @Put(':id')
+  @Put(':backAccountId')
   update(
-    @Param('id') id: string,
+    @ActiveUserId() userId: string,
+    @Param('backAccountId', ParseUUIDPipe) backAccountId: string,
     @Body() updateBankAccountDto: UpdateBankAccountDto,
   ) {
-    return this.bankAccountsService.update(id, updateBankAccountDto);
+    return this.bankAccountsService.update(
+      userId,
+      backAccountId,
+      updateBankAccountDto,
+    );
   }
 
   @Delete(':id')
