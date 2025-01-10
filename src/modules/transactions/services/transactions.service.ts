@@ -9,6 +9,8 @@ import { ValidateBankAccountOwnershipService } from '../../bank-accounts/service
 import { ValidateCategoryOwnershipService } from '../../categories/services/validate-category-ownership.service';
 import { ValidateTransactionOwnershipService } from './validate-transaction-ownership.service';
 
+import { TransactionType } from '../entities/Transaction';
+
 @Injectable()
 export class TransactionsService {
   constructor(
@@ -39,7 +41,12 @@ export class TransactionsService {
 
   findAllByUserId(
     userId: string,
-    filters: { month: number; year: number; bankAccountId?: string },
+    filters: {
+      month: number;
+      year: number;
+      bankAccountId?: string;
+      type?: TransactionType;
+    },
   ) {
     return this.transactionsRepository.findMany({
       where: {
@@ -49,6 +56,7 @@ export class TransactionsService {
           lt: new Date(Date.UTC(filters.year, filters.month + 1)),
         },
         backAccountId: filters.bankAccountId,
+        type: filters.type,
       },
     });
   }
