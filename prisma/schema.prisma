@@ -73,7 +73,7 @@ model Category {
 model Transaction {
   id            String          @id @default(uuid()) @db.Uuid
   userId        String          @map("user_id") @db.Uuid
-  backAccountId String          @map("bank_account_id") @db.Uuid
+  bankAccountId String          @map("bank_account_id") @db.Uuid
   categoryId    String?         @map("category_id") @db.Uuid
   name          String
   value         Float
@@ -81,7 +81,7 @@ model Transaction {
   type          TransactionType
 
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  backAccount BankAccount @relation(fields: [backAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   category    Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("transactions")

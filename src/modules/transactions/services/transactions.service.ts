@@ -21,15 +21,15 @@ export class TransactionsService {
   ) {}
 
   async create(userId: string, createTransactionDto: CreateTransactionDto) {
-    const { backAccountId, categoryId, date, name, type, value } =
+    const { bankAccountId, categoryId, date, name, type, value } =
       createTransactionDto;
 
-    await this.validateEntitiesOwnership({ userId, backAccountId, categoryId });
+    await this.validateEntitiesOwnership({ userId, bankAccountId, categoryId });
 
     return this.transactionsRepository.create({
       data: {
         userId,
-        backAccountId,
+        bankAccountId,
         categoryId,
         date,
         name,
@@ -55,7 +55,7 @@ export class TransactionsService {
           gte: new Date(Date.UTC(filters.year, filters.month)),
           lt: new Date(Date.UTC(filters.year, filters.month + 1)),
         },
-        backAccountId: filters.bankAccountId,
+        bankAccountId: filters.bankAccountId,
         type: filters.type,
       },
     });
@@ -66,12 +66,12 @@ export class TransactionsService {
     transactionId: string,
     updateTransactionDto: UpdateTransactionDto,
   ) {
-    const { backAccountId, categoryId, date, name, type, value } =
+    const { bankAccountId, categoryId, date, name, type, value } =
       updateTransactionDto;
 
     await this.validateEntitiesOwnership({
       userId,
-      backAccountId,
+      bankAccountId,
       categoryId,
       transactionId,
     });
@@ -81,7 +81,7 @@ export class TransactionsService {
         id: transactionId,
       },
       data: {
-        backAccountId,
+        bankAccountId,
         categoryId,
         date,
         name,
@@ -108,7 +108,7 @@ export class TransactionsService {
 
   private async validateEntitiesOwnership(data: {
     userId: string;
-    backAccountId?: string;
+    bankAccountId?: string;
     categoryId?: string;
     transactionId?: string;
   }) {
@@ -118,10 +118,10 @@ export class TransactionsService {
           data.userId,
           data.transactionId,
         ),
-      data.backAccountId &&
+      data.bankAccountId &&
         this.validateBankAccountOwnershipService.validate(
           data.userId,
-          data.backAccountId,
+          data.bankAccountId,
         ),
       data.categoryId &&
         this.validateCategoryOwnershipService.validate(

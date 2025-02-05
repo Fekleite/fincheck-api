@@ -14,7 +14,7 @@ export class CreateTransactionDto {
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  backAccountId: string;
+  bankAccountId: string;
 
   @IsString()
   @IsNotEmpty()
