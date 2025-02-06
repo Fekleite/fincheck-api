@@ -58,6 +58,9 @@ export class TransactionsService {
         bankAccountId: filters.bankAccountId,
         type: filters.type,
       },
+      include: {
+        category: true,
+      },
     });
   }
 
